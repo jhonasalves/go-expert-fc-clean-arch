@@ -1,6 +1,6 @@
 # Desafio Clean Arch
 
-Este desafio tem como objetivo criar o use case de listagem de pedidos (orders) utilizando uma arquitetura limpa.
+Este desafio tem como objetivo criar o use case de listagem de pedidos (orders) utilizando Clean Arch.
 
 ## Requisitos do Desafio
 
