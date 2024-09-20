@@ -14,11 +14,21 @@ func NewListOrderUseCase(OrderRepository entity.OrderRepositoryInterface) *ListO
 	}
 }
 
-func (c *ListOrderUseCase) Execute() ([]entity.Order, error) {
-	orders, err := c.OrderRepository.FindAll()
+func (l *ListOrderUseCase) Execute() ([]OrderOutputDTO, error) {
+	orders, err := l.OrderRepository.FindAll()
 	if err != nil {
 		return nil, err
 	}
 
-	return orders, nil
+	var ordersModel []OrderOutputDTO
+	for _, order := range orders {
+		ordersModel = append(ordersModel, OrderOutputDTO{
+			ID:         order.ID,
+			Price:      order.Price,
+			Tax:        order.Tax,
+			FinalPrice: order.FinalPrice,
+		})
+	}
+
+	return ordersModel, nil
 }
