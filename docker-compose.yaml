@@ -1,6 +1,31 @@
-version: '3'
+version: '3.8'
 
 services:
+  app:
+    build:
+      context: .
+    container_name: app
+    ports:
+      - 8000:8000
+    volumes:
+      - ./sql/migrations:/app/sql/migrations
+    depends_on:
+      mysql:
+        condition: service_started
+      migrate:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+
+  migrate:
+    image: migrate/migrate
+    container_name: migrate
+    command: migrate -path=/app/sql/migrations -database "mysql://root:root@tcp(db:3306)/orders" -verbose up
+    volumes:
+      - ./sql/migrations:/app/sql/migrations
+    depends_on:
+      - mysql
+
   mysql:
     image: mysql:5.7
     container_name: mysql
@@ -24,3 +49,8 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 5s
+      timeout: 10s
+      retries: 3
