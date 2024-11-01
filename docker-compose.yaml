@@ -20,7 +20,7 @@ services:
   migrate:
     image: migrate/migrate
     container_name: migrate
-    command: migrate -path=/app/sql/migrations -database "mysql://root:root@tcp(db:3306)/orders" -verbose up
+    command: migrate -path=/app/sql/migrations -database "mysql://root:root@tcp(mysql:3306)/orders" -verbose up
     volumes:
       - ./sql/migrations:/app/sql/migrations
     depends_on:
